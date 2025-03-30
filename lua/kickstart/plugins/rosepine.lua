@@ -1,11 +1,7 @@
 return {
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+  {
     'rose-pine/neovim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
+    priority = 1000,
     config = function()
       ---@diagnostic disable-next-line: missing-fields
       require('rose-pine').setup {
@@ -16,8 +12,8 @@ return {
 
         enable = {
           terminal = true,
-          legacy_highlights = true, -- Improve compatibility for previous versions of Neovim
-          migrations = true, -- Handle deprecated options automatically
+          legacy_highlights = true,
+          migrations = true,
         },
 
         styles = {
@@ -65,8 +61,6 @@ return {
           -- },
         },
 
-        -- NOTE: Highlight groups are extended (merged) by default. Disable this
-        -- per group via `inherit = false`
         highlight_groups = {
           -- Comment = { fg = "foam" },
           -- StatusLine = { fg = "love", bg = "love", blend = 15 },
@@ -87,7 +81,7 @@ return {
         end,
       }
 
-      -- Load the colorscheme here.
+      -- Load the colorscheme here
       vim.cmd.colorscheme 'rose-pine'
     end,
   },
