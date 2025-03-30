@@ -1,5 +1,5 @@
--- Use backspace as normal
-vim.opt.backspace = { 'eol', 'start', 'indent' }
+-- No mouse
+vim.opt.mouse = ''
 
 -- Wrap lines
 vim.opt.wrap = true
