@@ -31,13 +31,15 @@ return {
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        python = { 'isort', 'black' },
+        cpp = { 'clang-format' },
+        c = { 'clang-format' },
+        sh = { 'beautysh' },
+        bash = { 'beautysh' },
+        markdown = { 'vale' },
       },
     },
   },
 }
+
 -- vim: ts=2 sts=2 sw=2 et

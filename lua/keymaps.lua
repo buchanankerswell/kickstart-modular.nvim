@@ -44,7 +44,7 @@ vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'scroll up and center cursor' }
 vim.keymap.set('n', 'n', 'nzzzv', { desc = 'search next and center cursor' })
 vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'search previous and center cursor' })
 
-vim.keymap.set('n', '<leader>pv', vim.cmd.Ex, { desc = 'ppen file explorer' })
+vim.keymap.set('n', '<leader>pv', vim.cmd.Ex, { desc = '[p]review [v]im file explorer' })
 
 -- Use blackhole register for <leader> copy/paste
 vim.keymap.set('x', '<leader>p', [["_dP]], { desc = 'paste over selection without losing clipboard content' })

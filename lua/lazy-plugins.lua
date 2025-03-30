@@ -11,9 +11,9 @@ require('lazy').setup({
   require 'kickstart/plugins/mini',
   require 'kickstart/plugins/treesitter',
   require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.neo-tree',
 }, {
   ui = {
     icons = vim.g.have_nerd_font and {} or {
