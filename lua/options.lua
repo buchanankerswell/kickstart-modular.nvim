@@ -3,6 +3,10 @@
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
 
+vim.opt.backspace = { 'eol', 'start', 'indent' }
+vim.opt.wrap = true
+vim.opt.whichwrap:append '<>,hl'
+
 -- Make line numbers default
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
@@ -77,5 +81,15 @@ vim.opt.scrolloff = 10
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.opt.confirm = true
+
+vim.api.nvim_create_autocmd('BufReadPost', {
+  pattern = '*',
+  callback = function()
+    if vim.fn.line '\'"' > 1 and vim.fn.line '\'"' <= vim.fn.line '$' then
+      vim.cmd 'normal! g\'"'
+    end
+  end,
+  desc = 'Return to last edit position when opening files',
+})
 
 -- vim: ts=2 sts=2 sw=2 et
