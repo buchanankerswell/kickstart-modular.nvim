@@ -1,74 +1,56 @@
--- [[ Setting options ]]
--- See `:help vim.o`
--- NOTE: You can change these options as you wish!
---  For more options, you can see `:help option-list`
+vim.o.number = true -- Show absolute line numbers
+vim.o.relativenumber = true -- Show relative line numbers
+vim.o.showmode = false -- Don't show mode
+vim.o.breakindent = true -- Indent wrapped lines to match line start
+vim.o.undofile = true -- Save undo history to a file
+vim.o.ignorecase = true -- Case-insensitive search...
+vim.o.smartcase = true -- ...unless search contains uppercase
+vim.o.signcolumn = 'yes' -- Always show the sign column
+vim.o.updatetime = 250 -- Faster updates
+vim.o.timeoutlen = 300 -- Shorter timeout for key sequence completion
+vim.o.splitright = true -- Vertical splits open to the right
+vim.o.splitbelow = true -- Horizontal splits open below
+vim.o.list = true -- Show invisible characters
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' } -- Set symbols for invisible characters
+vim.o.inccommand = 'split' -- Preview substitute command in a split window
+vim.o.cursorline = true -- Highlight the current line
+vim.o.scrolloff = 10 -- Keep 10 lines visible above/below cursor when scrolling
+vim.o.confirm = true -- Prompt to save changes when closing unsaved buffers
 
--- Make line numbers default
-vim.o.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
-
--- Enable mouse mode, can be useful for resizing splits for example!
-vim.o.mouse = 'a'
-
--- Don't show the mode, since it's already in the status line
-vim.o.showmode = false
-
--- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
+-- Use system clipboard
 vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
 end)
 
--- Enable break indent
-vim.o.breakindent = true
+-- Smart indent
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'cpp', 'c', 'python', 'r', 'sh', 'bash', 'markdown', 'md' },
+  callback = function()
+    local ft = vim.bo.filetype
+    if ft == 'python' then
+      vim.bo.shiftwidth = 4
+      vim.bo.tabstop = 4
+      vim.bo.softtabstop = 4
+    else
+      vim.bo.shiftwidth = 2
+      vim.bo.tabstop = 2
+      vim.bo.softtabstop = 2
+    end
+    vim.bo.expandtab = true
+    vim.bo.smartindent = ft ~= 'markdown'
+  end,
+})
 
--- Save undo history
-vim.o.undofile = true
+-- Spell checking configuration
+vim.opt.spellfile = vim.fn.stdpath 'config' .. '/spell/en.utf-8.add'
 
--- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
-vim.o.ignorecase = true
-vim.o.smartcase = true
-
--- Keep signcolumn on by default
-vim.o.signcolumn = 'yes'
-
--- Decrease update time
-vim.o.updatetime = 250
-
--- Decrease mapped sequence wait time
-vim.o.timeoutlen = 300
-
--- Configure how new splits should be opened
-vim.o.splitright = true
-vim.o.splitbelow = true
-
--- Sets how neovim will display certain whitespace characters in the editor.
---  See `:help 'list'`
---  and `:help 'listchars'`
---
---  Notice listchars is set using `vim.opt` instead of `vim.o`.
---  It is very similar to `vim.o` but offers an interface for conveniently interacting with tables.
---   See `:help lua-options`
---   and `:help lua-options-guide`
-vim.o.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
-
--- Preview substitutions live, as you type!
-vim.o.inccommand = 'split'
-
--- Show which line your cursor is on
-vim.o.cursorline = true
-
--- Minimal number of screen lines to keep above and below the cursor.
-vim.o.scrolloff = 10
-
--- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
--- instead raise a dialog asking if you wish to save the current file(s)
--- See `:help 'confirm'`
-vim.o.confirm = true
+-- Enable spell checking for markdown and tex files
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'markdown', 'tex', 'text' },
+  callback = function()
+    vim.opt_local.spell = true
+    vim.opt_local.spelllang = { 'en_us' }
+  end,
+})
 
 -- vim: ts=2 sts=2 sw=2 et

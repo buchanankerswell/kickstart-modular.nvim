@@ -1,60 +1,91 @@
 return {
-
-  { -- Linting
+  {
     'mfussenegger/nvim-lint',
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       local lint = require 'lint'
       lint.linters_by_ft = {
+        python = { 'ruff' },
+        cpp = { 'cppcheck' },
+        c = { 'cppcheck' },
+        r = { 'lintr' },
+        sh = { 'shellcheck' },
+        bash = { 'shellcheck' },
         markdown = { 'markdownlint' },
+        yaml = { 'prettier' },
+        json = { 'prettier' },
+        toml = { 'prettier' },
       }
+      lint.linters.lintr = {
+        name = 'lintr',
+        cmd = 'Rscript',
+        stdin = false,
+        args = {
+          '-e',
+          [[lintr::lint(commandArgs(TRUE))]],
+          '--args',
+        },
+        stream = 'stdout',
+        ignore_exitcode = true,
+        parser = require('lint.parser').from_errorformat('%f:%l:%c: %m', {
+          source = 'lintr',
+          severity = vim.diagnostic.severity.WARN,
+        }),
+      }
+      local function cppcheck_args()
+        local filetype = vim.bo.filetype
+        local language = (filetype == 'c') and 'c' or 'c++'
 
-      -- To allow other plugins to add linters to require('lint').linters_by_ft,
-      -- instead set linters_by_ft like this:
-      -- lint.linters_by_ft = lint.linters_by_ft or {}
-      -- lint.linters_by_ft['markdown'] = { 'markdownlint' }
-      --
-      -- However, note that this will enable a set of default linters,
-      -- which will cause errors unless these tools are available:
-      -- {
-      --   clojure = { "clj-kondo" },
-      --   dockerfile = { "hadolint" },
-      --   inko = { "inko" },
-      --   janet = { "janet" },
-      --   json = { "jsonlint" },
-      --   markdown = { "vale" },
-      --   rst = { "vale" },
-      --   ruby = { "ruby" },
-      --   terraform = { "tflint" },
-      --   text = { "vale" }
-      -- }
-      --
-      -- You can disable the default linters by setting their filetypes to nil:
-      -- lint.linters_by_ft['clojure'] = nil
-      -- lint.linters_by_ft['dockerfile'] = nil
-      -- lint.linters_by_ft['inko'] = nil
-      -- lint.linters_by_ft['janet'] = nil
-      -- lint.linters_by_ft['json'] = nil
-      -- lint.linters_by_ft['markdown'] = nil
-      -- lint.linters_by_ft['rst'] = nil
-      -- lint.linters_by_ft['ruby'] = nil
-      -- lint.linters_by_ft['terraform'] = nil
-      -- lint.linters_by_ft['text'] = nil
-
-      -- Create autocommand which carries out the actual linting
-      -- on the specified events.
+        return {
+          '--enable=warning,style,performance,portability',
+          '--template=gcc',
+          '--suppressions-list=' .. vim.fn.expand '~/.config/nvim/cppcheck-suppressions.txt',
+          '--inline-suppr',
+          '--std=' .. ((filetype == 'c') and 'c11' or 'c++17'),
+          '--language=' .. language,
+          '--quiet',
+          '--force',
+        }
+      end
+      lint.linters.cppcheck.args = cppcheck_args()
+      lint.linters.ruff.args = {
+        '--quiet',
+        '--format=gnu',
+        '--select=ALL',
+        '--ignore=E501',
+      }
+      lint.linters.shellcheck.args = {
+        '--format=gcc',
+        '--shell=bash',
+        '--enable=all',
+        '--external-sources',
+      }
+      lint.linters.prettier = {
+        name = 'prettier',
+        cmd = 'prettier',
+        stdin = true,
+        args = { '--stdin-filepath', '%filepath', '--prose-wrap', 'preserve', '--print-width', '150' },
+        stream = 'stdout',
+        ignore_exitcode = false,
+        parser = require('lint.parser').from_errorformat('%f:%l:%c: %m', {
+          source = 'prettier',
+          severity = vim.diagnostic.severity.WARN,
+        }),
+      }
       local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
       vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
         group = lint_augroup,
         callback = function()
-          -- Only run the linter in buffers that you can modify in order to
-          -- avoid superfluous noise, notably within the handy LSP pop-ups that
-          -- describe the hovered symbol using Markdown.
           if vim.bo.modifiable then
             lint.try_lint()
           end
         end,
       })
+      vim.keymap.set('n', '<leader>l', function()
+        lint.try_lint()
+      end, { desc = 'Lint Buffer' })
     end,
   },
 }
+
+-- vim: ts=2 sts=2 sw=2 et
