@@ -1,9 +1,8 @@
 return {
   {
     'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    opts = {
-      ensure_installed = {
+    config = function()
+      local ensure_installed = {
         'bash',
         'zsh',
         'cpp',
@@ -17,8 +16,6 @@ return {
         'diff',
         'html',
         'css',
-        'tsv',
-        'csv',
         'markdown',
         'markdown_inline',
         'toml',
@@ -26,11 +23,22 @@ return {
         'json',
         'latex',
         'bibtex',
-      },
-      auto_install = true,
-      highlight = { enable = true },
-      indent = { enable = true },
-    },
+        'vim',
+        'tsv',
+        'csv',
+      }
+      require('nvim-treesitter').install(ensure_installed)
+      vim.list_extend(ensure_installed, {
+        'bib',
+        'tex'
+      })
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = ensure_installed,
+        callback = function()
+          vim.treesitter.start()
+        end,
+      })
+    end,
   },
 }
 
