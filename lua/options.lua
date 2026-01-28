@@ -11,11 +11,11 @@ vim.o.timeoutlen = 300 -- Shorter timeout for key sequence completion
 vim.o.splitright = true -- Vertical splits open to the right
 vim.o.splitbelow = true -- Horizontal splits open below
 vim.o.list = true -- Show invisible characters
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' } -- Set symbols for invisible characters
 vim.o.inccommand = 'split' -- Preview substitute command in a split window
 vim.o.cursorline = true -- Highlight the current line
 vim.o.scrolloff = 10 -- Keep 10 lines visible above/below cursor when scrolling
 vim.o.confirm = true -- Prompt to save changes when closing unsaved buffers
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' } -- Set symbols for invisible characters
 
 -- Use system clipboard
 vim.schedule(function()
@@ -24,7 +24,7 @@ end)
 
 -- Smart indent
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'cpp', 'c', 'python', 'r', 'sh', 'bash', 'markdown', 'md' },
+  pattern = { 'cpp', 'c', 'python', 'r', 'sh', 'bash', 'markdown' },
   callback = function()
     local ft = vim.bo.filetype
     if ft == 'python' then

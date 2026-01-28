@@ -122,15 +122,12 @@ return {
           settings = {
             python = {
               analysis = {
-                autoSearchPaths = true,
-                diagnosticMode = 'workspace',
-                useLibraryCodeForTypes = true,
                 typeCheckingMode = 'basic',
-                extraPaths = {},
-                reportUnusedImport = true,
-                reportUnusedClass = true,
-                reportUnusedFunction = true,
-                reportUnusedVariable = true,
+                diagnosticMode = 'openFilesOnly',
+                reportUnusedImport = false,
+                reportUnusedClass = false,
+                reportUnusedFunction = false,
+                reportUnusedVariable = false,
               },
             },
           },
@@ -148,6 +145,7 @@ return {
           filetypes = { 'sh', 'bash' },
         },
         marksman = {},
+        texlab = {},
         lua_ls = {
           settings = {
             Lua = {
@@ -157,31 +155,20 @@ return {
             },
           },
         },
-        ltex = {
-          settings = {
-            ltex = {
-              language = 'en-US',
-              additionalRules = {
-                enablePickyRules = true,
-              },
-            },
-          },
-          filetypes = { 'markdown', 'tex', 'bib', 'text' },
-        },
-        yamlls = {},
-        jsonls = {},
-        taplo = {},
       }
 
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua',
-        'black',
+        'ruff',
         'isort',
+        'black',
         'clang-format',
+        'shellcheck',
         'shfmt',
+        'markdownlint',
         'prettier',
-        'ltex-ls',
+        'latexindent',
+        'stylua',
       })
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }

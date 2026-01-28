@@ -25,19 +25,25 @@ return {
         sh = { 'shfmt' },
         bash = { 'shfmt' },
         markdown = { 'prettier' },
-        yaml = { 'prettier' },
-        json = { 'prettier' },
-        toml = { 'prettier' },
+        latex = { 'latexindent' },
       },
       formatters = {
         shfmt = {
-          prepend_args = { '-i', '2', '-ci' },
+          prepend_args = { '-i', '2', '-ci', '-ln', 'bash' },
         },
         prettier = {
           prepend_args = { '--prose-wrap', 'preserve', '--print-width', '150' },
         },
         black = {
           prepend_args = { '--line-length', '150' },
+        },
+        styler = {
+          prepend_args = function()
+            return {
+              '--width',
+              '150',
+            }
+          end,
         },
       },
     },

@@ -12,9 +12,6 @@ return {
         sh = { 'shellcheck' },
         bash = { 'shellcheck' },
         markdown = { 'markdownlint' },
-        yaml = { 'prettier' },
-        json = { 'prettier' },
-        toml = { 'prettier' },
       }
       lint.linters.lintr = {
         name = 'lintr',
@@ -51,26 +48,14 @@ return {
       lint.linters.ruff.args = {
         '--quiet',
         '--format=gnu',
-        '--select=ALL',
-        '--ignore=E501',
+        '--select=E,W,F,I,N,UP,YTT,ANN,S,BLE,B,A,COM,C4,DTZ,ISC,ICN,G,PIE,T20,Q,RSE,RET,SLF,SIM,TID,ARG,PTH,PD,PL,NPY,RUF',
+        '--ignore=E501,ANN101,ANN102',
       }
       lint.linters.shellcheck.args = {
         '--format=gcc',
         '--shell=bash',
         '--enable=all',
         '--external-sources',
-      }
-      lint.linters.prettier = {
-        name = 'prettier',
-        cmd = 'prettier',
-        stdin = true,
-        args = { '--stdin-filepath', '%filepath', '--prose-wrap', 'preserve', '--print-width', '150' },
-        stream = 'stdout',
-        ignore_exitcode = false,
-        parser = require('lint.parser').from_errorformat('%f:%l:%c: %m', {
-          source = 'prettier',
-          severity = vim.diagnostic.severity.WARN,
-        }),
       }
       local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
       vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
