@@ -32,7 +32,7 @@ return {
       require('nvim-treesitter').install(ensure_installed)
       vim.list_extend(ensure_installed, {
         'bib',
-        'tex'
+        'tex',
       })
       vim.api.nvim_create_autocmd('FileType', {
         pattern = ensure_installed,
