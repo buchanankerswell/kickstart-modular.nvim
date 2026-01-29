@@ -26,6 +26,8 @@ return {
         'vim',
         'tsv',
         'csv',
+        'make',
+        'cmake',
       }
       require('nvim-treesitter').install(ensure_installed)
       vim.list_extend(ensure_installed, {
