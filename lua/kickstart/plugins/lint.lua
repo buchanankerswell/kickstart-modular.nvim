@@ -29,16 +29,22 @@ return {
         local filetype = vim.bo.filetype
         local language = (filetype == 'c') and 'c' or 'c++'
 
-        return {
+        local args = {
           '--enable=warning,style,performance,portability',
           '--template=gcc',
-          '--suppressions-list=' .. vim.fn.expand '~/.config/nvim/cppcheck-suppressions.txt',
           '--inline-suppr',
           '--std=' .. ((filetype == 'c') and 'c11' or 'c++17'),
           '--language=' .. language,
           '--quiet',
           '--force',
         }
+
+        local suppressions_file = vim.fn.findfile('.cppcheck-suppressions', '.;')
+        if suppressions_file ~= '' then
+          table.insert(args, '--suppressions-list=' .. suppressions_file)
+        end
+
+        return args
       end
       lint.linters.cppcheck.args = cppcheck_args()
       lint.linters.ruff.args = {
