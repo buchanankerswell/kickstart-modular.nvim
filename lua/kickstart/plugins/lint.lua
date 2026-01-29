@@ -17,11 +17,7 @@ return {
         name = 'lintr',
         cmd = 'Rscript',
         stdin = false,
-        args = {
-          '-e',
-          [[lintr::lint(commandArgs(TRUE))]],
-          '--args',
-        },
+        args = { '-e', [[lintr::lint(commandArgs(TRUE))]], '--args' },
         stream = 'stdout',
         ignore_exitcode = true,
         parser = require('lint.parser').from_errorformat('%f:%l:%c: %m', {
