@@ -4,11 +4,11 @@ return {
     ---@module "csvview"
     ---@type CsvView.Options
     opts = {
-      parser = { comments = { '#', '//' } },
-      keymaps = {
-        -- Text objects for selecting fields
-        textobject_field_inner = { 'if', mode = { 'o', 'x' } },
-        textobject_field_outer = { 'af', mode = { 'o', 'x' } },
+      parser = { comments = { '#', '//', '--' } },
+      view = {
+        display_mode = 'border',
+        min_column_width = 5,
+        spacing = 0,
       },
     },
     cmd = { 'CsvViewEnable', 'CsvViewDisable', 'CsvViewToggle' },
