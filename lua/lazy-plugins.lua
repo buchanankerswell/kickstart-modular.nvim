@@ -2,6 +2,7 @@ require('lazy').setup({
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.blink-cmp',
   require 'kickstart.plugins.conform',
+  require 'kickstart.plugins.csvview',
   require 'kickstart.plugins.gitsigns',
   require 'kickstart.plugins.guess-indent',
   require 'kickstart.plugins.lint',
