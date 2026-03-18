@@ -132,15 +132,6 @@ return {
             },
           },
         },
-        r_language_server = {
-          settings = {
-            r = {
-              lsp = {
-                rich_documentation = false,
-              },
-            },
-          },
-        },
         bashls = {
           filetypes = { 'sh', 'bash' },
         },
@@ -184,6 +175,22 @@ return {
           end,
         },
       }
+      vim.lsp.config('r_language_server', {
+        cmd = { 'R', '--no-save', '--no-restore', '-e', 'languageserver::run()' },
+        on_init = function(client)
+          client.notify('workspace/didChangeConfiguration', { settings = client.config.settings })
+        end,
+        capabilities = vim.tbl_deep_extend('force', {}, capabilities, {}),
+        settings = {
+          r = {
+            lsp = {
+              rich_documentation = false,
+              lint_cache = false,
+            },
+          },
+        },
+      })
+      vim.lsp.enable 'r_language_server'
     end,
   },
 }
