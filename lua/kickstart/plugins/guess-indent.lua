@@ -14,6 +14,9 @@ local function gh(repo) return 'https://github.com/' .. repo end
 -- We first install it from https://github.com/NMAC427/guess-indent.nvim
 -- and then call its `setup()` function to start it with default settings.
 vim.pack.add { gh 'NMAC427/guess-indent.nvim' }
-require('guess-indent').setup {}
+require('guess-indent').setup {
+  auto_cmd = true,
+  override_editorconfig = false,
+}
 
 -- vim: ts=2 sts=2 sw=2 et

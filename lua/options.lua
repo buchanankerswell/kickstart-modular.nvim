@@ -19,7 +19,7 @@ vim.g.have_nerd_font = false
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -80,5 +80,36 @@ vim.o.scrolloff = 10
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.o.confirm = true
+
+-- Smart indent
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'cpp', 'c', 'python', 'r', 'sh', 'bash', 'markdown' },
+  callback = function()
+    local ft = vim.bo.filetype
+    if ft == 'python' then
+      vim.bo.shiftwidth = 4
+      vim.bo.tabstop = 4
+      vim.bo.softtabstop = 4
+    else
+      vim.bo.shiftwidth = 2
+      vim.bo.tabstop = 2
+      vim.bo.softtabstop = 2
+    end
+    vim.bo.expandtab = true
+    vim.bo.smartindent = ft ~= 'markdown'
+  end,
+})
+
+-- Spell checking configuration
+vim.opt.spellfile = vim.fn.stdpath 'config' .. '/spell/en.utf-8.add'
+
+-- Enable spell checking for markdown and tex files
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'markdown', 'tex', 'text' },
+  callback = function()
+    vim.opt_local.spell = true
+    vim.opt_local.spelllang = { 'en_us' }
+  end,
+})
 
 -- vim: ts=2 sts=2 sw=2 et

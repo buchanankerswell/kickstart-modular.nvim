@@ -72,4 +72,37 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function() vim.hl.on_yank() end,
 })
 
+-- Append line without jumping to end
+vim.keymap.set('n', 'J', 'mzJ`z')
+
+-- Center jump scroll
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+
+-- Center search results
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', 'N', 'Nzzzv')
+
+-- Disable legacy Q command
+vim.keymap.set('n', 'Q', '<nop>')
+
+-- Paste without clobbering
+vim.keymap.set('x', '<leader>p', [["_dP]], { desc = 'Paste (no clobber)' })
+
+-- Yank to clipboard instead of buffer
+vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]], { desc = 'Yank (no buffer)' })
+vim.keymap.set('n', '<leader>Y', [["+Y]], { desc = 'Yank Line (no buffer)' })
+
+-- Delete without adding to buffer
+vim.keymap.set({ 'n', 'v' }, '<leader>d', [["_d]], { desc = 'Delete (no buffer)' })
+
+-- Smart search and replace under cursor
+vim.keymap.set('n', '<leader>S', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Search & Replace' })
+
+-- Write file
+vim.keymap.set('n', '<leader>w', '<cmd>w<CR>', { silent = true, desc = 'Write Buffer' })
+
+-- Toggle Spellcheck
+vim.keymap.set('n', '<leader>ts', '<cmd>setlocal spell!<CR>', { desc = 'Toggle Spell Check' })
+
 -- vim: ts=2 sts=2 sw=2 et
